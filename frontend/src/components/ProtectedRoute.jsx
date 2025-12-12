@@ -3,13 +3,20 @@ import { AuthContext } from "../context/AuthContext";
 import { Navigate } from "react-router-dom";
 
 export default function ProtectedRoute({ children, role }) {
-  const { user } = useContext(AuthContext);
+  const { user, loading } = useContext(AuthContext);
 
-  // Not logged in → send to login page
-  if (!user) return <Navigate to="/" />;
+  // ⭐ Wait until we load user from localStorage
+  if (loading) return null; // or a loader UI
 
-  // If a role is required, but user does not match role
-  if (role && user.role !== role) return <Navigate to="/" />;
+  // fallback: user restored from localStorage
+  const storedUser = localStorage.getItem("user");
+  const finalUser = user || (storedUser ? JSON.parse(storedUser) : null);
+
+  // Not logged in
+  if (!finalUser) return <Navigate to="/" replace />;
+
+  // Role mismatch
+  if (role && finalUser.role !== role) return <Navigate to="/" replace />;
 
   return children;
 }
