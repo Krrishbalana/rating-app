@@ -3,22 +3,19 @@ const router = express.Router();
 
 const { verifyToken, ensureRole } = require("../middleware/auth");
 const storeController = require("../controllers/storeController");
+const adminController = require("../controllers/adminController");
 
 /* --------------------------------------------------
-   PUBLIC ROUTES (Accessible by normal users too)
+   PUBLIC ROUTES
 ---------------------------------------------------*/
 
-// Get all stores (public)
 router.get("/", storeController.getAllStores);
-
-// Get store by ID (public)
 router.get("/:id", storeController.getStoreById);
 
 /* --------------------------------------------------
-   PROTECTED ROUTES (Owner + Admin)
+   PROTECTED ROUTES
 ---------------------------------------------------*/
 
-// Create store
 router.post(
   "/",
   verifyToken,
@@ -26,7 +23,6 @@ router.post(
   storeController.createStore
 );
 
-// Get stores for a specific owner
 router.get(
   "/owner/:ownerId",
   verifyToken,
@@ -34,7 +30,22 @@ router.get(
   storeController.getStoresByOwner
 );
 
-// Update store
+// 🔥 ADMIN GET ALL STORES
+router.get(
+  "/admin/all",
+  verifyToken,
+  ensureRole("system_admin"),
+  adminController.getAllStoresAdmin
+);
+
+// ADMIN: Create store for any owner
+router.post(
+  "/admin-create",
+  verifyToken,
+  ensureRole("system_admin"),
+  storeController.adminCreateStore
+);
+
 router.put(
   "/:id",
   verifyToken,
@@ -42,7 +53,6 @@ router.put(
   storeController.updateStore
 );
 
-// Delete store
 router.delete(
   "/:id",
   verifyToken,

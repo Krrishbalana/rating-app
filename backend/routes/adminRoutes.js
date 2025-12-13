@@ -20,11 +20,40 @@ router.put(
   adminController.updateUserRole
 );
 
+router.get(
+  "/stats",
+  verifyToken,
+  ensureRole("system_admin"),
+  adminController.getStats
+);
+
 router.delete(
   "/users/:id",
   verifyToken,
   ensureRole("system_admin"),
   adminController.deleteUser
+);
+
+router.post(
+  "/users/create",
+  verifyToken,
+  ensureRole("system_admin"),
+  adminController.createUser
+);
+
+router.get(
+  "/stores",
+  verifyToken,
+  ensureRole("system_admin"),
+  adminController.getAllStoresAdmin
+);
+
+// Get full details of a specific user
+router.get(
+  "/users/:id/details",
+  verifyToken,
+  ensureRole("system_admin"),
+  adminController.getUserDetails
 );
 
 module.exports = router;

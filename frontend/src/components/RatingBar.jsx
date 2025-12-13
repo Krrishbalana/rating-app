@@ -3,16 +3,16 @@ export default function RatingBar({ stars, count, total }) {
 
   return (
     <div className="flex items-center gap-3 mb-2">
-      <span className="w-6 text-sm">{stars}★</span>
+      <span className="w-8 text-sm font-medium text-white/70">{stars}★</span>
 
-      <div className="flex-1 bg-gray-200 h-3 rounded">
+      <div className="flex-1 h-2 rounded-full bg-white/10 overflow-hidden">
         <div
-          className="bg-yellow-500 h-3 rounded"
+          className="h-2 rounded-full bg-yellow-400 transition-all duration-200 ease-out"
           style={{ width: `${percent}%` }}
         />
       </div>
 
-      <span className="w-6 text-right text-sm text-gray-700">{count}</span>
+      <span className="w-8 text-right text-sm text-white/40">{count}</span>
     </div>
   );
 }

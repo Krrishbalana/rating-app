@@ -164,6 +164,75 @@ exports.updateStore = async (req, res) => {
   }
 };
 
+// ---------------------------- GET ALL STORES (ADMIN) ----------------------------
+exports.getAllStoresAdmin = async (req, res) => {
+  try {
+    const result = await db.query(`
+      SELECT
+        s.id,
+        s.name,
+        s.email,
+        s.address,
+        u.name AS owner_name,
+        u.email AS owner_email,
+        COALESCE(ROUND(AVG(r.rating)::numeric, 1), 0) AS avg_rating,
+        COUNT(r.*) AS rating_count
+      FROM stores s
+      JOIN users u ON u.id = s.owner_id
+      LEFT JOIN ratings r ON r.store_id = s.id
+      GROUP BY s.id, u.name, u.email
+      ORDER BY s.id ASC
+    `);
+
+    return res.json(result.rows);
+  } catch (err) {
+    console.error("ADMIN getAllStores error:", err);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
+// ------------------ ADMIN CREATE STORE (assign to any owner) ------------------
+exports.adminCreateStore = async (req, res) => {
+  try {
+    const { name, email, address, owner_id } = req.body;
+
+    if (!name || !owner_id) {
+      return res
+        .status(400)
+        .json({ message: "Store name & owner_id required" });
+    }
+
+    // Check owner exists & is store_owner
+    const ownerCheck = await db.query(
+      "SELECT id, role FROM users WHERE id=$1",
+      [owner_id]
+    );
+
+    if (ownerCheck.rows.length === 0) {
+      return res.status(404).json({ message: "Owner not found" });
+    }
+
+    if (ownerCheck.rows[0].role !== "store_owner") {
+      return res.status(400).json({ message: "User is not a store owner" });
+    }
+
+    // Create store assigned to specific owner
+    const result = await db.query(
+      `INSERT INTO stores (name, email, address, owner_id)
+       VALUES ($1, $2, $3, $4)
+       RETURNING *`,
+      [name, email, address, owner_id]
+    );
+
+    return res.status(201).json({
+      message: "Store created successfully",
+      store: result.rows[0],
+    });
+  } catch (err) {
+    console.error("adminCreateStore error:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 // ------------------ DELETE STORE ------------------
 exports.deleteStore = async (req, res) => {
   try {

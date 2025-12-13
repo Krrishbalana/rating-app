@@ -88,7 +88,8 @@ export default function StoreDetail() {
     }
   };
 
-  if (!store) return <div className="p-6">Loading...</div>;
+  if (!store)
+    return <div className="p-6 text-sm text-white/70">Loading...</div>;
 
   const total = store.rating_count || 0;
   const breakdown = store.rating_breakdown || {};
@@ -96,55 +97,63 @@ export default function StoreDetail() {
   return (
     <div className="p-6 space-y-6">
       {/* HEADER */}
-      <div className="bg-white p-6 shadow rounded-lg">
+      <div className="bg-neutral-900/80 border border-white/5 shadow-sm shadow-black/40 p-6 rounded-lg transition-all duration-200 ease-out">
         <div className="flex justify-between items-start">
-          <div>
-            <h1 className="text-3xl font-bold">{store.name}</h1>
-            <p className="text-gray-600">{store.address}</p>
+          <div className="space-y-1">
+            <h1 className="text-xl font-bold text-white leading-snug">
+              {store.name}
+            </h1>
+            <p className="text-sm text-white/70">{store.address}</p>
           </div>
 
           <div className="text-right">
-            <div className="text-4xl font-bold text-yellow-500">
+            <div className="text-3xl font-bold text-white">
               {Number(store.average_rating).toFixed(1)}
             </div>
-            <p className="text-gray-500">{total} reviews</p>
+            <p className="text-sm text-white/40">{total} reviews</p>
           </div>
         </div>
       </div>
 
       {/* BREAKDOWN + REVIEW FORM */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* LEFT: Rating Breakdown */}
-        <div className="bg-white p-6 shadow rounded-lg">
-          <h2 className="font-semibold mb-4">Rating Breakdown</h2>
+        {/* LEFT */}
+        <div className="bg-neutral-900/80 border border-white/5 shadow-sm shadow-black/40 p-6 rounded-lg transition-all duration-200 ease-out">
+          <h2 className="text-lg font-bold text-white mb-4 leading-snug">
+            Rating Breakdown
+          </h2>
 
-          {[5, 4, 3, 2, 1].map((s) => (
-            <RatingBar
-              key={s}
-              stars={s}
-              count={breakdown[s] || 0}
-              total={total}
-            />
-          ))}
+          <div className="space-y-3">
+            {[5, 4, 3, 2, 1].map((s) => (
+              <RatingBar
+                key={s}
+                stars={s}
+                count={breakdown[s] || 0}
+                total={total}
+              />
+            ))}
+          </div>
         </div>
 
-        {/* RIGHT: Add / Edit Review */}
-        <div className="md:col-span-2 bg-white p-6 shadow rounded-lg">
-          <h2 className="font-semibold mb-3">
+        {/* RIGHT */}
+        <div className="md:col-span-2 bg-neutral-900/80 border border-white/5 shadow-sm shadow-black/40 p-6 rounded-lg transition-all duration-200 ease-out">
+          <h2 className="text-lg font-bold text-white mb-3 leading-snug">
             {editing ? "Edit Review" : "Write a Review"}
           </h2>
 
           {!user ? (
-            <p className="text-gray-600">Please login to leave a review.</p>
+            <p className="text-sm text-white/70">
+              Please login to leave a review.
+            </p>
           ) : (
-            <form onSubmit={handleSubmit} className="space-y-3">
+            <form onSubmit={handleSubmit} className="space-y-4">
               <StarInput
                 value={form.rating}
                 onChange={(r) => setForm({ ...form, rating: r })}
               />
 
               <textarea
-                className="w-full border p-3 rounded-lg"
+                className="w-full rounded-lg bg-neutral-800 border border-white/10 px-3 py-3 text-sm text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all duration-200 ease-out"
                 rows="4"
                 placeholder="Write your review here..."
                 required
@@ -152,15 +161,15 @@ export default function StoreDetail() {
                 onChange={(e) => setForm({ ...form, comment: e.target.value })}
               />
 
-              <div className="flex gap-2">
-                <button className="bg-green-600 text-white px-4 py-2 rounded">
+              <div className="flex gap-3">
+                <button className="rounded-lg bg-primary px-4 py-3 text-sm font-medium text-white shadow-sm shadow-black/40 transition-all duration-200 ease-out hover:scale-[1.02] hover:shadow-md active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-primary/40">
                   {editing ? "Save Changes" : "Submit Review"}
                 </button>
 
                 {editing && (
                   <button
                     type="button"
-                    className="border px-4 py-2 rounded"
+                    className="rounded-lg border border-white/10 px-4 py-3 text-sm text-white/70 transition-all duration-200 ease-out hover:bg-white/5 active:scale-[0.98]"
                     onClick={() => {
                       setEditing(null);
                       setForm({ rating: 5, comment: "" });
@@ -178,28 +187,31 @@ export default function StoreDetail() {
       {/* REVIEWS LIST */}
       <div className="space-y-4">
         {ratings.length === 0 ? (
-          <p className="text-gray-500 bg-white p-4 rounded shadow">
+          <p className="text-sm text-white/40 bg-neutral-900/80 border border-white/5 p-4 rounded-lg shadow-sm shadow-black/40">
             No reviews yet.
           </p>
         ) : (
           ratings.map((r) => (
-            <div key={r.id} className="bg-white p-4 rounded shadow">
+            <div
+              key={r.id}
+              className="bg-neutral-900/80 border border-white/5 p-4 rounded-lg shadow-sm shadow-black/40 transition-all duration-200 ease-out"
+            >
               <div className="flex justify-between">
-                <div>
-                  <p className="font-semibold">{r.user_name}</p>
+                <div className="space-y-1">
+                  <p className="text-sm font-bold text-white">{r.user_name}</p>
                   <StarsDisplay value={r.rating} />
                 </div>
 
                 {user && user.id === r.user_id && (
                   <div className="flex gap-3 text-sm">
                     <button
-                      className="text-blue-600"
+                      className="text-white/70 hover:text-white transition-colors"
                       onClick={() => handleEdit(r)}
                     >
                       Edit
                     </button>
                     <button
-                      className="text-red-600"
+                      className="text-red-400 hover:text-red-300 transition-colors"
                       onClick={() => handleDelete(r.id)}
                     >
                       Delete
@@ -208,7 +220,7 @@ export default function StoreDetail() {
                 )}
               </div>
 
-              <p className="mt-2 text-gray-800">{r.comment}</p>
+              <p className="mt-2 text-sm text-white/70">{r.comment}</p>
             </div>
           ))
         )}
