@@ -2,26 +2,6 @@ import { useState, useEffect, useContext } from "react";
 import api from "../../services/api";
 import { AuthContext } from "../../context/AuthContext";
 
-/**
- * Admin Dashboard
- * - Fancy tabs (Users | Stores | Stats)
- * - Users tab first (search, sorting, add user, view modal, update role, delete)
- * - Stores tab (admin stores view, search, sorting, delete, details modal)
- * - Stats tab (3 cards)
- *
- * Endpoints used (already created earlier):
- * GET  /admin/stats
- * GET  /admin/users
- * POST /admin/users/create
- * PUT  /admin/users/:id/role
- * DELETE /admin/users/:id
- * GET  /admin/users/:id/details
- *
- * GET  /admin/stores  (added in adminController)
- * DELETE /stores/:id  (existing store delete allowed for admin)
- * GET  /stores/:id
- */
-
 function SortIcon({ column, sortColumn, sortDirection }) {
   // HeroIcons-style chevrons using SVG
   if (sortColumn !== column) {
@@ -383,7 +363,7 @@ export default function AdminDashboard() {
             <div className="flex items-center justify-between gap-4">
               <button
                 onClick={() => setShowCreateUser(true)}
-                className="rounded-lg bg-primary px-4 py-3 text-sm font-medium text-white shadow-sm shadow-black/40 transition-all duration-200 ease-out hover:scale-[1.02] active:scale-[0.98] focus:ring-2 focus:ring-primary/40"
+                className="rounded-2xl bg-primary px-4 py-3 text-sm font-medium bg-zinc-700 text-white shadow-sm shadow-black/40 transition-all duration-200 ease-out hover:scale-[1.02] active:scale-[0.98] focus:ring-2 hover:px-6 focus:ring-primary/40"
               >
                 + Add User
               </button>
@@ -484,7 +464,7 @@ export default function AdminDashboard() {
                       <td className="p-3 flex gap-2">
                         <button
                           onClick={() => openUserDetails(u.id)}
-                          className="rounded-lg bg-primary px-3 py-2 text-sm text-white transition-all hover:scale-[1.02]"
+                          className="rounded-lg bg-primary px-3 py-2 text-sm bg-zinc-700 text-white transition-all hover:scale-[1.02]"
                         >
                           View
                         </button>
@@ -523,7 +503,7 @@ export default function AdminDashboard() {
             <div className="flex items-center justify-between gap-4">
               <button
                 onClick={() => setShowCreateStore(true)}
-                className="rounded-lg bg-primary px-4 py-3 text-sm font-medium text-white transition-all hover:scale-[1.02]"
+                className="rounded-2xl bg-primary px-4 py-3 text-sm font-medium text-white transition-all hover:scale-[1.02] bg-zinc-700 hover:px-6"
               >
                 + Add Store
               </button>

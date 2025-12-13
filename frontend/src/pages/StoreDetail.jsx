@@ -95,7 +95,7 @@ export default function StoreDetail() {
   const breakdown = store.rating_breakdown || {};
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="min-h-screen bg-neutral-950 p-6 space-y-6">
       {/* HEADER */}
       <div className="bg-neutral-900/80 border border-white/5 shadow-sm shadow-black/40 p-6 rounded-lg transition-all duration-200 ease-out">
         <div className="flex justify-between items-start">

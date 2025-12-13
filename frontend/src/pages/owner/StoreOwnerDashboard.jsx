@@ -113,7 +113,7 @@ export default function StoreOwnerDashboard() {
             onChange={(e) => setForm({ ...form, address: e.target.value })}
           />
 
-          <button className="w-full rounded-lg bg-primary px-4 py-3 text-sm font-medium text-white shadow-sm shadow-black/40 transition-all duration-200 ease-out hover:scale-[1.02] hover:shadow-md active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-primary/40">
+          <button className="w-full rounded-lg bg-zinc-700 px-4 py-3 text-sm font-medium text-white shadow-sm shadow-black/40 transition-all duration-200 ease-out hover:scale-[1.02] hover:shadow-md active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-primary/40">
             Create Store
           </button>
         </form>
